@@ -67,6 +67,11 @@ public class ConvertToBindingTest extends BaseConverterTest {
         convertedValue = qTypeConverter.convertToBinding(new QuantityType<>("451 °F"), floatQuantityDp);
         assertThat(convertedValue, is(232.777778));
 
+        floatQuantityDp.setUnit("&#176;C"); // at some points datapoints come with such unit instead of °C
+
+        convertedValue = qTypeConverter.convertToBinding(new QuantityType<>("451 °F"), floatQuantityDp);
+        assertThat(convertedValue, is(232.777778));
+
         floatQuantityDp.setUnit("km/h");
 
         convertedValue = qTypeConverter.convertToBinding(new QuantityType<>("70.07 m/s"), floatQuantityDp);

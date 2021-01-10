@@ -18,6 +18,7 @@ import javax.measure.Quantity;
 
 import org.openhab.binding.homematic.internal.converter.ConverterException;
 import org.openhab.binding.homematic.internal.model.HmDatapoint;
+import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.library.types.QuantityType;
 import org.openhab.core.library.unit.MetricPrefix;
 import org.openhab.core.library.unit.SIUnits;
@@ -33,6 +34,9 @@ public class QuantityTypeConverter extends AbstractTypeConverter<QuantityType<? 
 
     // this literal is required because some gateway types are mixing up encodings in their XML-RPC responses
     private final String UNCORRECT_ENCODED_CELSIUS = "Â°C";
+
+    // dpUnit provided by cuxd
+    private final String UNCORRECT_ENCODED_CELSIUS_CUXD = "&#176;C";
 
     // "100%" is a commonly used "unit" in datapoints. Generated channel-type is of DecimalType,
     // but clients may define a QuantityType if preferred
@@ -66,6 +70,8 @@ public class QuantityTypeConverter extends AbstractTypeConverter<QuantityType<? 
                 return type.toUnit(Units.DEGREE_ANGLE);
             case HUNDRED_PERCENT:
                 return type.toUnit(Units.ONE);
+            case UNCORRECT_ENCODED_CELSIUS_CUXD:
+                return type.toUnit(SIUnits.CELSIUS);
             case UNCORRECT_ENCODED_CELSIUS:
                 return type.toUnit(SIUnits.CELSIUS);
             case "dBm":
