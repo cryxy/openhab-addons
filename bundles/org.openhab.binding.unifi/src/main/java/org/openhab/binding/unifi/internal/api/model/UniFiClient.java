@@ -14,7 +14,6 @@ package org.openhab.binding.unifi.internal.api.model;
 
 import java.util.Calendar;
 
-import org.apache.commons.lang.BooleanUtils;
 import org.openhab.binding.unifi.internal.api.UniFiException;
 import org.openhab.binding.unifi.internal.api.util.UniFiTidyLowerCaseStringDeserializer;
 import org.openhab.binding.unifi.internal.api.util.UniFiTimestampDeserializer;
@@ -95,7 +94,7 @@ public abstract class UniFiClient {
     public abstract Boolean isWired();
 
     public final Boolean isWireless() {
-        return BooleanUtils.negate(isWired());
+        return isWired() == null ? null : (isWired().booleanValue() ? Boolean.FALSE : Boolean.TRUE);
     }
 
     protected abstract String getDeviceMac();
@@ -121,7 +120,7 @@ public abstract class UniFiClient {
     @Override
     public String toString() {
         return String.format(
-                "UniFiClient{mac: '%s', ip: '%s', hostname: '%s', alias: '%s', wired: %b, blocked: %b, device: %s}",
-                mac, ip, hostname, alias, isWired(), blocked, getDevice());
+                "UniFiClient{id: '%s', mac: '%s', ip: '%s', hostname: '%s', alias: '%s', wired: %b, blocked: %b, device: %s}",
+                id, mac, ip, hostname, alias, isWired(), blocked, getDevice());
     }
 }

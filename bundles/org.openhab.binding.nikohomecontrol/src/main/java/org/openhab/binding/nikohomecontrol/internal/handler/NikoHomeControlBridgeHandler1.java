@@ -12,6 +12,8 @@
  */
 package org.openhab.binding.nikohomecontrol.internal.handler;
 
+import static org.openhab.binding.nikohomecontrol.internal.NikoHomeControlBindingConstants.THREAD_NAME_PREFIX;
+
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,20 +43,21 @@ public class NikoHomeControlBridgeHandler1 extends NikoHomeControlBridgeHandler 
 
     @Override
     public void initialize() {
-        logger.debug("Niko Home Control: initializing bridge handler");
+        logger.debug("initializing bridge handler");
 
         setConfig();
         InetAddress addr = getAddr();
         int port = getPort();
 
-        logger.debug("Niko Home Control: bridge handler host {}, port {}", addr, port);
+        logger.debug("bridge handler host {}, port {}", addr, port);
 
         if (addr != null) {
-            nhcComm = new NikoHomeControlCommunication1(this, scheduler);
+            String eventThreadName = THREAD_NAME_PREFIX + thing.getUID().getAsString();
+            nhcComm = new NikoHomeControlCommunication1(this, scheduler, eventThreadName);
             startCommunication();
         } else {
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.COMMUNICATION_ERROR,
-                    "Niko Home Control: cannot resolve bridge IP with hostname " + config.addr);
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.CONFIGURATION_ERROR,
+                    "@text/offline.configuration-error.ip");
         }
     }
 

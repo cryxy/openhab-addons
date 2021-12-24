@@ -1088,7 +1088,7 @@ class AtlonaPro3PortocolHandler {
 
         @Override
         public void responseReceived(String response) {
-            if (response == null || response == "") {
+            if (response == null || response.isEmpty()) {
                 return;
             }
 
@@ -1118,7 +1118,7 @@ class AtlonaPro3PortocolHandler {
             }
 
             m = versionHdPattern.matcher(response);
-            if (m.matches()) {
+            if (!capabilities.isUHDModel() && m.matches()) {
                 handleVersionResponse(m, response);
                 return;
             }
